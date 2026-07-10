@@ -1,0 +1,7 @@
+.env
+docker-compose.yml
+redis/
+postgres/
+.git
+__pycache__/
+.vscode
