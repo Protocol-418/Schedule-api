@@ -13,8 +13,8 @@ class Stream(Base):
 
     # Foreign keys
     group_id: Mapped[int] = mapped_column(
-        Integer,
-        ForeignKey("groups.id", onupdate="CASCADE"),
+        String(50),
+        ForeignKey("groups.name", onupdate="CASCADE"),
         primary_key=True
     )
     subject_id: Mapped[int] = mapped_column(
