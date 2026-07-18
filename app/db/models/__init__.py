@@ -3,6 +3,48 @@
 from app.db.models.base import Base
 from app.db.models.user import User
 
-# Атрибут __all__ указывает какие модели должны экспортироваться
-# при экспорте всей папки: from models import *
-__all__ = ("Base", "User")
+from app.db.models.teachers_category import TeachersCategory
+from app.db.models.specialty import Specialty
+from app.db.models.payment_form import PaymentForm
+from app.db.models.class_session_type import ClassSessionType
+
+from app.db.models.teacher import Teacher
+from app.db.models.group import Group
+from app.db.models.building import Building
+from app.db.models.cabinet import Cabinet
+
+from app.db.models.plan import Plan
+from app.db.models.semester import Semester
+from app.db.models.chapter_in_plan import ChapterInPlan
+from app.db.models.cycle_in_chapter import CycleInChapter
+from app.db.models.module_in_cycle import ModuleInCycle
+
+from app.db.models.subject import Subject
+from app.db.models.certification import Certification
+
+from app.db.models.teacher_assignment import TeacherAssignment
+from app.db.models.stream import Stream
+from app.db.models.class_session import ClassSession
+
+__all__ = (
+    "Base",
+    "User",
+    "TeachersCategory",
+    "Specialty",
+    "PaymentForm",
+    "ClassSessionType",
+    "Teacher",
+    "Group",
+    "Building",
+    "Cabinet",
+    "Plan",
+    "Semester",
+    "ChapterInPlan",
+    "CycleInChapter",
+    "ModuleInCycle",
+    "Subject",
+    "Certification",
+    "TeacherAssignment",
+    "Stream",
+    "ClassSession",
+)
