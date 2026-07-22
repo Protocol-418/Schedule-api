@@ -1,31 +1,27 @@
 from typing import Annotated
-from pydantic import BaseModel, Field
+from pydantic import Field
+from app.core.base_schemas import CustomBaseModel
 
 
-class CreateTeacherCategory(BaseModel):
-    name: Annotated[
-        str,
-        Field(min_length=1, max_length=50)
-    ] = Field(
-        ...,
-        description="Название категории преподавателя",
-        examples=["Высшая"]
-    )
+TeacherCategoryName = Annotated[str, Field(min_length=1, max_length=50, description="Название категории преподавателя", examples=["Высшая"])]
 
 
-class UpdateTeacherCategory(BaseModel):
-    name: Annotated[
-        str,
-        Field(min_length=1, max_length=50)
-    ] | None = Field(
-        None,
-        description="Название категории преподавателя"
-    )
+class BaseTeacherCategoryModel(CustomBaseModel):
+    """Базовая схема со всеми возможными полями (все nullable для гибкости)"""
+    name: TeacherCategoryName | None = None
 
 
-class ShowTeacherCategory(BaseModel):
-    name: str = Field(..., description="Название категории преподавателя")
+class CreateTeacherCategory(BaseTeacherCategoryModel):
+    """Схема создания"""
+    name: TeacherCategoryName
 
-    model_config = {
-        "from_attributes": True
-    }
+
+class UpdateTeacherCategory(BaseTeacherCategoryModel):
+    """Схема обновления"""
+    pass
+
+
+class ShowTeacherCategory(BaseTeacherCategoryModel):
+    """Схема ответа"""
+    id: Annotated[int, Field(description="ID категории", examples=[418])]
+    name: TeacherCategoryName

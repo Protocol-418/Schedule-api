@@ -1,57 +1,38 @@
-from uuid import UUID
 from typing import Annotated
-from pydantic import BaseModel, Field, EmailStr, StringConstraints
+from uuid import UUID
+from pydantic import Field, EmailStr, StringConstraints
+from app.core.base_schemas import CustomBaseModel
 
 
-class GetUserByEmail(BaseModel):
-    email: EmailStr = Field(
-        ..., 
-        description="Электронная почта пользователя",
-        examples=["user@example.com"]
-    )
+UserEmail = Annotated[EmailStr, Field(max_length=100, description="Электронная почта", examples=["user@example.com"])]
+Username = Annotated[str, Field(min_length=3, max_length=30, description="Публичное имя пользователя", examples=["ivan_ivanov"])]
+UserPassword = Annotated[str, Field(min_length=8, max_length=128, description="Сложный пароль (минимум 8 символов)", examples=["StrongPassword123!"])]
+UserRole = Annotated[str, Field(max_length=50, description="Роль пользователя", examples=["admin"])]
 
 
-class CreateUser(GetUserByEmail):
-    username: Annotated[
-        str, 
-        StringConstraints(min_length=3, max_length=30)
-    ] | None = Field(
-        None, 
-        description="Публичное имя пользователя",
-        examples=["ivan_ivanov"]
-    )
-    password: Annotated[
-        str, 
-        StringConstraints(min_length=8, max_length=128)
-    ] = Field(
-        ..., 
-        description="Сложный пароль (минимум 8 символов)",
-        examples=["StrongPassword123!"]
-    )
-    role: str | None = Field(
-        "admin", 
-        description="Роль при регистрации (по умолчанию 'admin')"
-    )
+class BaseUserModel(CustomBaseModel):
+    """Базовая схема со всеми возможными полями (все nullable для гибкости)"""
+    username: Username | None = None
+    email: UserEmail | None = None
+    role: UserRole | None = None
 
 
-class UpdateUser(BaseModel):
-    username: Annotated[
-        str,
-        StringConstraints(min_length=3, max_length=30)
-    ] | None = Field(
-        None, 
-        description="Публичное имя пользователя",
-        examples=["ivan_ivanov"]
-    )
+class CreateUser(BaseUserModel):
+    """Схема создания"""
+    email: UserEmail
+    password: UserPassword
+    role: UserRole = "admin"
 
 
-class ShowUser(BaseModel):
-    uuid: UUID = Field(..., description="ID пользователя")
-    username: str | None = Field(None, description="Имя профиля")
-    email: EmailStr = Field(..., description="Почта")
-    role: str = Field(..., description="Текущая роль")
-    is_active: bool = Field(..., description="Статус активности аккаунта")
+class UpdateUser(BaseUserModel):
+    """Схема обновления"""
+    pass
 
-    model_config = {
-        "from_attributes": True  # Позволяет работать с объектами SQLAlchemy
-    } 
+
+class ShowUser(BaseUserModel):
+    """Схема ответа"""
+    uuid: Annotated[UUID, Field(description="ID пользователя")]
+    username: Username
+    email: UserEmail
+    role: UserRole
+    is_active: Annotated[bool, Field(description="Статус активности аккаунта")]

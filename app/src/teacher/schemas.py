@@ -1,112 +1,40 @@
 from typing import Annotated
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import Field, EmailStr
+from app.core.base_schemas import CustomBaseModel
 
 
-class CreateTeacher(BaseModel):
-    name: Annotated[
-        str,
-        Field(min_length=1, max_length=100)
-    ] = Field(
-        ...,
-        description="Имя преподавателя",
-        examples=["Иван"]
-    )
-    surname: Annotated[
-        str,
-        Field(min_length=1, max_length=100)
-    ] = Field(
-        ...,
-        description="Фамилия преподавателя",
-        examples=["Иванов"]
-    )
-    lastname: Annotated[
-        str,
-        Field(max_length=100)
-    ] | None = Field(
-        None,
-        description="Отчество преподавателя",
-        examples=["Иванович"]
-    )
-    phone_number: Annotated[
-        str,
-        Field(max_length=20)
-    ] | None = Field(
-        None,
-        description="Номер телефона",
-        examples=["+7 999 123-45-67"]
-    )
-    email: Annotated[
-        str,
-        Field(max_length=100)
-    ] | None = Field(
-        None,
-        description="Электронная почта",
-        examples=["ivanov@example.com"]
-    )
-    teacher_category: Annotated[
-        str,
-        Field(max_length=50)
-    ] | None = Field(
-        None,
-        description="Категория преподавателя",
-        examples=["Высшая"]
-    )
+TeacherName = Annotated[str, Field(min_length=1, max_length=100, description="Имя преподавателя", examples=["Иван"])]
+TeacherSurname = Annotated[str, Field(min_length=1, max_length=100, description="Фамилия преподавателя", examples=["Иванов"])]
+TeacherLastname = Annotated[str, Field(max_length=100, description="Отчество преподавателя", examples=["Иванович"])]
+TeacherPhone = Annotated[str, Field(max_length=20, description="Номер телефона", examples=["+7 999 123-45-67"])]
+TeacherEmail = Annotated[EmailStr, Field(max_length=100, description="Электронная почта", examples=["ivanov@example.com"])]
+TeacherCategory = Annotated[str, Field(max_length=50, description="Категория преподавателя", examples=["Высшая"])]
 
 
-class UpdateTeacher(BaseModel):
-    name: Annotated[
-        str,
-        Field(min_length=1, max_length=100)
-    ] | None = Field(
-        None,
-        description="Имя преподавателя"
-    )
-    surname: Annotated[
-        str,
-        Field(min_length=1, max_length=100)
-    ] | None = Field(
-        None,
-        description="Фамилия преподавателя"
-    )
-    lastname: Annotated[
-        str,
-        Field(max_length=100)
-    ] | None = Field(
-        None,
-        description="Отчество преподавателя"
-    )
-    phone_number: Annotated[
-        str,
-        Field(max_length=20)
-    ] | None = Field(
-        None,
-        description="Номер телефона"
-    )
-    email: Annotated[
-        str,
-        Field(max_length=100)
-    ] | None = Field(
-        None,
-        description="Электронная почта"
-    )
-    teacher_category: Annotated[
-        str,
-        Field(max_length=50)
-    ] | None = Field(
-        None,
-        description="Категория преподавателя"
-    )
+class BaseTeacherModel(CustomBaseModel):
+    """Базовая схема со всеми возможными полями (все nullable для гибкости)"""
+    name: TeacherName | None = None
+    surname: TeacherSurname | None = None
+    lastname: TeacherLastname | None = None
+    phone_number: TeacherPhone | None = None
+    email: TeacherEmail | None = None
+    teacher_category: TeacherCategory | None = None
 
 
-class ShowTeacher(BaseModel):
-    id: int = Field(..., description="ID преподавателя")
-    name: str = Field(..., description="Имя преподавателя")
-    surname: str = Field(..., description="Фамилия преподавателя")
-    lastname: str | None = Field(None, description="Отчество преподавателя")
-    phone_number: str | None = Field(None, description="Номер телефона")
-    email: str | None = Field(None, description="Электронная почта")
-    teacher_category: str | None = Field(None, description="Категория преподавателя")
+class CreateTeacher(BaseTeacherModel):
+    """Схема создания (в ней переопределяем только то, что строго обязательно)"""
+    name: TeacherName
+    surname: TeacherSurname
 
-    model_config = {
-        "from_attributes": True
-    }
+
+class UpdateTeacher(BaseTeacherModel):
+    """Схема обновления"""
+    pass 
+
+
+class ShowTeacher(BaseTeacherModel):
+    """Схема ответа"""
+    id: Annotated[int, Field(description="ID преподавателя", examples=[418])]
+    name: TeacherName
+    surname: TeacherSurname
+

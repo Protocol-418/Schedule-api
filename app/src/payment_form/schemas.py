@@ -1,47 +1,30 @@
 from typing import Annotated
-from pydantic import BaseModel, Field
+from pydantic import Field
+from app.core.base_schemas import CustomBaseModel
 
 
-class CreatePaymentForm(BaseModel):
-    name: Annotated[
-        str,
-        Field(min_length=1, max_length=50)
-    ] = Field(
-        ...,
-        description="Название формы оплаты",
-        examples=["Бюджетная"]
-    )
-    is_state_funded: Annotated[
-        bool,
-        Field()
-    ] = Field(
-        ...,
-        description="Является ли бюджетной формой обучения",
-        examples=[True]
-    )
+PaymentFormName = Annotated[str, Field(min_length=1, max_length=50, description="Название формы оплаты", examples=["Бюджетная"])]
+IsStateFunded = Annotated[bool, Field(description="Флаг: является ли бюджетной формой обучения", examples=[True])]
 
 
-class UpdatePaymentForm(BaseModel):
-    name: Annotated[
-        str,
-        Field(min_length=1, max_length=50)
-    ] | None = Field(
-        None,
-        description="Название формы оплаты"
-    )
-    is_state_funded: Annotated[
-        bool,
-        Field()
-    ] | None = Field(
-        None,
-        description="Является ли бюджетной формой обучения"
-    )
+class BasePaymentFormModel(CustomBaseModel):
+    """Базовая схема со всеми возможными полями (все nullable для гибкости)"""
+    name: PaymentFormName | None = None
+    is_state_funded: IsStateFunded | None = None
 
 
-class ShowPaymentForm(BaseModel):
-    name: str = Field(..., description="Название формы оплаты")
-    is_state_funded: bool = Field(..., description="Является ли бюджетной формой обучения")
+class CreatePaymentForm(BasePaymentFormModel):
+    """Схема создания"""
+    name: PaymentFormName
+    is_state_funded: IsStateFunded
 
-    model_config = {
-        "from_attributes": True
-    }
+
+class UpdatePaymentForm(BasePaymentFormModel):
+    """Схема обновления"""
+    pass
+
+
+class ShowPaymentForm(BasePaymentFormModel):
+    """Схема ответа"""
+    name: PaymentFormName
+    is_state_funded: IsStateFunded
