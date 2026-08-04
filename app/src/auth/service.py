@@ -1,14 +1,16 @@
-from typing import Annotated
-from sqlalchemy.ext.asyncio import AsyncSession
-import redis.asyncio as redis
 import uuid
+from typing import Annotated
+
+import redis.asyncio as redis
 from fastapi import Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.dependies import get_db, get_redis_sessions
-from app.src.user.repository import UserRepository
-from app.src.auth.schemas import LoginRequest
-from app.core.security.password import verify_password
 from app.core.exceptions.exceptions import Unauthorized
+from app.core.security.password import verify_password
 from app.src.auth.repository import UserSessionsRepository
+from app.src.auth.schemas import LoginRequest
+from app.src.user.repository import UserRepository
 
 
 class AuthService:

@@ -1,7 +1,6 @@
 import redis.asyncio as redis
-from fastapi import Depends, Request
-
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from fastapi import Request
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import settings
 

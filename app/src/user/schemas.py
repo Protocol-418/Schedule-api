@@ -1,8 +1,9 @@
 from typing import Annotated
 from uuid import UUID
-from pydantic import Field, EmailStr, StringConstraints
-from app.core.base_schemas import CustomBaseModel
 
+from pydantic import EmailStr, Field
+
+from app.core.base_schemas import CustomBaseModel
 
 UserEmail = Annotated[EmailStr, Field(max_length=100, description="Электронная почта", examples=["user@example.com"])]
 Username = Annotated[str, Field(min_length=3, max_length=30, description="Публичное имя пользователя", examples=["ivan_ivanov"])]
@@ -26,7 +27,6 @@ class CreateUser(BaseUserModel):
 
 class UpdateUser(BaseUserModel):
     """Схема обновления"""
-    pass
 
 
 class ShowUser(BaseUserModel):

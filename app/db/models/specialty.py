@@ -1,11 +1,12 @@
-from app.db.models.base import Base
-
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.db.models.base import Base
 
 
 class Specialty(Base):
     """Справочник специальностей"""
+
     __tablename__ = "specialties"
 
     code: Mapped[str] = mapped_column(String(20), primary_key=True)

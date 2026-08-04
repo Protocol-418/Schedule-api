@@ -1,7 +1,8 @@
 from typing import Annotated
-from pydantic import Field
-from app.core.base_schemas import CustomBaseModel
 
+from pydantic import Field
+
+from app.core.base_schemas import CustomBaseModel
 
 PaymentFormName = Annotated[str, Field(min_length=1, max_length=50, description="Название формы оплаты", examples=["Бюджетная"])]
 IsStateFunded = Annotated[bool, Field(description="Флаг: является ли бюджетной формой обучения", examples=[True])]
@@ -21,7 +22,6 @@ class CreatePaymentForm(BasePaymentFormModel):
 
 class UpdatePaymentForm(BasePaymentFormModel):
     """Схема обновления"""
-    pass
 
 
 class ShowPaymentForm(BasePaymentFormModel):

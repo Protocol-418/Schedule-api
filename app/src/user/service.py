@@ -1,15 +1,15 @@
-from app.core.dependies import get_db
-from app.core.exceptions.exceptions import NotFoundException, ConflictException
-from app.src.user.repository import UserRepository
-from app.src.user.schemas import CreateUser, UpdateUser
-from app.core.security.password import get_password_hash
-from app.db.models.user import User
-
 from typing import Annotated
 from uuid import UUID
 
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.dependies import get_db
+from app.core.exceptions.exceptions import ConflictException, NotFoundException
+from app.core.security.password import get_password_hash
+from app.db.models.user import User
+from app.src.user.repository import UserRepository
+from app.src.user.schemas import CreateUser, UpdateUser
 
 
 class UserService:

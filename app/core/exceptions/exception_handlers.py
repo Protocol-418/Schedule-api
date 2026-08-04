@@ -1,7 +1,8 @@
 # Файл с обработчиками ошибок в fast api
-from app.core.exceptions.exceptions import AppBaseException
 from fastapi import Request
 from fastapi.responses import JSONResponse
+
+from app.core.exceptions.exceptions import AppBaseException
 
 
 async def app_exception_handler(request: Request, exc: AppBaseException):
@@ -14,10 +15,9 @@ async def app_exception_handler(request: Request, exc: AppBaseException):
         content={
             "error": {
                 "code": exc.error_code,
-                "message": exc.detail, 
+                "message": exc.detail,
                 "service": exc.service,
-                "details": exc.details
+                "details": exc.details,
             }
-        }
+        },
     )
-

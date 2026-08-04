@@ -1,9 +1,9 @@
-from app.src.teacher.service import TeacherService
-from app.src.teacher.schemas import CreateTeacher, ShowTeacher, UpdateTeacher
-
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
+
+from app.src.teacher.schemas import CreateTeacher, ShowTeacher, UpdateTeacher
+from app.src.teacher.service import TeacherService
 
 teacher_router = APIRouter(prefix="/teacher", tags=["teachers"])
 

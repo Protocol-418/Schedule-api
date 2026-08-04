@@ -1,13 +1,16 @@
-from app.core.dependies import get_db
-from app.core.exceptions.exceptions import NotFoundException, ConflictException
-from app.src.teacher_category.repository import TeacherCategoryRepository
-from app.src.teacher_category.schemas import CreateTeacherCategory, UpdateTeacherCategory
-from app.db.models.teachers_category import TeachersCategory
-
 from typing import Annotated
 
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.dependies import get_db
+from app.core.exceptions.exceptions import ConflictException, NotFoundException
+from app.db.models.teachers_category import TeachersCategory
+from app.src.teacher_category.repository import TeacherCategoryRepository
+from app.src.teacher_category.schemas import (
+    CreateTeacherCategory,
+    UpdateTeacherCategory,
+)
 
 
 class TeacherCategoryService:

@@ -1,12 +1,13 @@
-from app.db.models.base import Base
-from app.db.mixins.id_mixin import IDMixin
-
+from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, ForeignKey
+
+from app.db.mixins.id_mixin import IDMixin
+from app.db.models.base import Base
 
 
 class Cabinet(IDMixin, Base):
     """Кабинеты"""
+
     __tablename__ = "cabinets"
 
     number: Mapped[int] = mapped_column(Integer)
@@ -14,8 +15,12 @@ class Cabinet(IDMixin, Base):
     state: Mapped[str | None] = mapped_column(String(50))
 
     # Foreign keys
-    building_number: Mapped[int] = mapped_column(Integer, ForeignKey("buildings.number", onupdate="CASCADE"))
+    building_number: Mapped[int] = mapped_column(
+        Integer, ForeignKey("buildings.number", onupdate="CASCADE")
+    )
 
     # Relationships
     building: Mapped["Building"] = relationship(back_populates="cabinets")
-    class_sessions: Mapped[list["ClassSession"]] = relationship(back_populates="cabinet")
+    class_sessions: Mapped[list["ClassSession"]] = relationship(
+        back_populates="cabinet"
+    )

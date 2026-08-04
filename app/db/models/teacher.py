@@ -1,11 +1,12 @@
-from app.db.models.base import Base
-
+from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, ForeignKey
+
+from app.db.models.base import Base
 
 
 class Teacher(Base):
     """Преподаватель"""
+
     __tablename__ = "teachers"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -16,9 +17,13 @@ class Teacher(Base):
     email: Mapped[str | None] = mapped_column(String(100))
 
     # Foreign keys
-    teacher_category: Mapped[str | None] = mapped_column(String(50), ForeignKey("teachers_categories.name", onupdate="CASCADE"))
+    teacher_category: Mapped[str | None] = mapped_column(
+        String(50), ForeignKey("teachers_categories.name", onupdate="CASCADE")
+    )
 
     # Relationships
     category: Mapped["TeachersCategory"] = relationship(back_populates="teachers")
     advised_groups: Mapped[list["Group"]] = relationship(back_populates="advisor")
-    assignments: Mapped[list["TeacherAssignment"]] = relationship(back_populates="teacher")
+    assignments: Mapped[list["TeacherAssignment"]] = relationship(
+        back_populates="teacher"
+    )

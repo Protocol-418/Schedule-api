@@ -1,12 +1,12 @@
-from app.db.models.user import User
-from app.src.user.service import UserService
-from app.src.user.schemas import CreateUser, ShowUser, UpdateUser
-from app.core.security.security import RoleChecker
-
 from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
+
+from app.core.security.security import RoleChecker
+from app.db.models.user import User
+from app.src.user.schemas import CreateUser, ShowUser, UpdateUser
+from app.src.user.service import UserService
 
 user_router = APIRouter(prefix="/user", tags=["users"])
 

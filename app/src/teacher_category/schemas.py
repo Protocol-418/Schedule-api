@@ -1,7 +1,8 @@
 from typing import Annotated
-from pydantic import Field
-from app.core.base_schemas import CustomBaseModel
 
+from pydantic import Field
+
+from app.core.base_schemas import CustomBaseModel
 
 TeacherCategoryName = Annotated[str, Field(min_length=1, max_length=50, description="Название категории преподавателя", examples=["Высшая"])]
 
@@ -18,7 +19,6 @@ class CreateTeacherCategory(BaseTeacherCategoryModel):
 
 class UpdateTeacherCategory(BaseTeacherCategoryModel):
     """Схема обновления"""
-    pass
 
 
 class ShowTeacherCategory(BaseTeacherCategoryModel):

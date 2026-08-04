@@ -1,11 +1,12 @@
-from app.db.models.base import Base
-
+from sqlalchemy import BigInteger, Boolean, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import BigInteger, String, Boolean, Integer, ForeignKey
+
+from app.db.models.base import Base
 
 
 class Subject(Base):
     """Дисциплина"""
+
     __tablename__ = "subjects"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
@@ -23,10 +24,14 @@ class Subject(Base):
     intermediate_assessment_hours: Mapped[int] = mapped_column(Integer)
 
     # Foreign keys
-    semester_id: Mapped[int] = mapped_column(Integer, ForeignKey("semesters.id", onupdate="CASCADE"))
+    semester_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("semesters.id", onupdate="CASCADE")
+    )
 
     # Relationships
     semester: Mapped["Semester"] = relationship(back_populates="subjects")
     certification: Mapped["Certification"] = relationship(back_populates="subject")
-    assignments: Mapped[list["TeacherAssignment"]] = relationship(back_populates="subject")
+    assignments: Mapped[list["TeacherAssignment"]] = relationship(
+        back_populates="subject"
+    )
     streams: Mapped[list["Stream"]] = relationship(back_populates="subject")

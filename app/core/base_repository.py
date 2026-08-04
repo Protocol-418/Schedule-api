@@ -1,16 +1,18 @@
-from app.db.models.base import Base
-
 from typing import TypeVar
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import select
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.db.models.base import Base
 
 # Тип модели для аннотации функций
-ModelType = TypeVar("ModelType", bound=Base) 
+ModelType = TypeVar("ModelType", bound=Base)
+
 
 class BaseRepository:
     """Базовый класс слоя репозиториев, нужен для базовых crud-операций"""
+
     model = None
 
     def __init__(self, session: AsyncSession):
@@ -38,7 +40,7 @@ class BaseRepository:
         """Метод для создания записи"""
         self.session.add(entity)
         await self.session.commit()
-        await self.session.refresh(entity) # Актуализируем данные о записи
+        await self.session.refresh(entity)  # Актуализируем данные о записи
         return entity
 
     async def delete_entity(self, entity: ModelType) -> bool:
@@ -60,4 +62,3 @@ class BaseRepository:
         except SQLAlchemyError as e:
             self.session.rollback()
             raise e
-    

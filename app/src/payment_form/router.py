@@ -1,9 +1,13 @@
-from app.src.payment_form.service import PaymentFormService
-from app.src.payment_form.schemas import CreatePaymentForm, ShowPaymentForm, UpdatePaymentForm
-
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
+
+from app.src.payment_form.schemas import (
+    CreatePaymentForm,
+    ShowPaymentForm,
+    UpdatePaymentForm,
+)
+from app.src.payment_form.service import PaymentFormService
 
 payment_form_router = APIRouter(prefix="/payment-form", tags=["payment_forms"])
 

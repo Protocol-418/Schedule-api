@@ -1,9 +1,13 @@
-from app.src.teacher_category.service import TeacherCategoryService
-from app.src.teacher_category.schemas import CreateTeacherCategory, ShowTeacherCategory, UpdateTeacherCategory
-
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
+
+from app.src.teacher_category.schemas import (
+    CreateTeacherCategory,
+    ShowTeacherCategory,
+    UpdateTeacherCategory,
+)
+from app.src.teacher_category.service import TeacherCategoryService
 
 teacher_category_router = APIRouter(prefix="/teacher-category", tags=["teacher-categories"])
 

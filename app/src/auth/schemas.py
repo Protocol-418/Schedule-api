@@ -1,5 +1,7 @@
 from typing import Annotated
-from pydantic import Field, EmailStr
+
+from pydantic import EmailStr, Field
+
 from app.core.base_schemas import CustomBaseModel
 
 

@@ -1,11 +1,11 @@
-from app.db.models import User
-
-from app.src.auth.service import AuthService
-from app.src.auth.schemas import LoginRequest
-
 from typing import Annotated
+
 from fastapi import APIRouter, Depends, Response
+
 from app.core.security.security import get_current_user
+from app.db.models import User
+from app.src.auth.schemas import LoginRequest
+from app.src.auth.service import AuthService
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 

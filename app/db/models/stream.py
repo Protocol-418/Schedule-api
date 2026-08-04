@@ -1,11 +1,12 @@
-from app.db.models.base import Base
-
+from sqlalchemy import BigInteger, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import BigInteger, String, Integer, ForeignKey
+
+from app.db.models.base import Base
 
 
 class Stream(Base):
     """Поток (объединение нескольких групп по дисциплине)"""
+
     __tablename__ = "streams"
 
     number: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -13,14 +14,10 @@ class Stream(Base):
 
     # Foreign keys
     group_id: Mapped[int] = mapped_column(
-        String(50),
-        ForeignKey("groups.name", onupdate="CASCADE"),
-        primary_key=True
+        String(50), ForeignKey("groups.name", onupdate="CASCADE"), primary_key=True
     )
     subject_id: Mapped[int] = mapped_column(
-        BigInteger,
-        ForeignKey("subjects.id", onupdate="CASCADE"),
-        primary_key=True
+        BigInteger, ForeignKey("subjects.id", onupdate="CASCADE"), primary_key=True
     )
 
     # Relationships

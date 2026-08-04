@@ -1,9 +1,11 @@
-from fastapi import Request, Depends
 from typing import Annotated
+
+from fastapi import Depends, Request
+
+from app.core.exceptions.exceptions import Forbidden, Unauthorized
+from app.db.models.user import User
 from app.src.auth.service import AuthService
 from app.src.user.service import UserService
-from app.core.exceptions.exceptions import Unauthorized, Forbidden
-from app.db.models.user import User
 
 
 async def get_current_user(
@@ -29,7 +31,7 @@ class RoleChecker:
     async def __call__(self, current_user: Annotated[User, Depends(get_current_user)]) -> User:
         # Проверяем роль пользователя 
         if current_user.role not in self.allowed_roles:
-            raise Forbidden(service="Auth", message=f"Для вашей роли доступ запрещён")
+            raise Forbidden(service="Auth", message="Для вашей роли доступ запрещён")
             
         # Если всё ок - возвращаем пользователя в эндпоинт
         return current_user

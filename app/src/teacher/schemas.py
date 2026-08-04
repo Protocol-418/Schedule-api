@@ -1,7 +1,8 @@
 from typing import Annotated
-from pydantic import Field, EmailStr
-from app.core.base_schemas import CustomBaseModel
 
+from pydantic import EmailStr, Field
+
+from app.core.base_schemas import CustomBaseModel
 
 TeacherName = Annotated[str, Field(min_length=1, max_length=100, description="Имя преподавателя", examples=["Иван"])]
 TeacherSurname = Annotated[str, Field(min_length=1, max_length=100, description="Фамилия преподавателя", examples=["Иванов"])]
@@ -29,7 +30,6 @@ class CreateTeacher(BaseTeacherModel):
 
 class UpdateTeacher(BaseTeacherModel):
     """Схема обновления"""
-    pass 
 
 
 class ShowTeacher(BaseTeacherModel):

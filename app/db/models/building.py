@@ -1,11 +1,12 @@
-from app.db.models.base import Base
-
+from sqlalchemy import Boolean, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, Boolean
+
+from app.db.models.base import Base
 
 
 class Building(Base):
     """Корпуса"""
+
     __tablename__ = "buildings"
 
     number: Mapped[int] = mapped_column(Integer, primary_key=True)

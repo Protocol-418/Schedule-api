@@ -1,11 +1,12 @@
-from app.db.models.base import Base
-
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Boolean, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.db.models.base import Base
 
 
 class PaymentForm(Base):
     """Справочник форм оплаты"""
+
     __tablename__ = "payment_forms"
 
     name: Mapped[str] = mapped_column(String(50), primary_key=True)

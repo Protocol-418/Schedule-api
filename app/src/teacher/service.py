@@ -1,14 +1,14 @@
-from app.core.dependies import get_db
-from app.core.exceptions.exceptions import NotFoundException
-from app.src.teacher.repository import TeacherRepository
-from app.src.teacher_category.service import TeacherCategoryService
-from app.src.teacher.schemas import CreateTeacher, UpdateTeacher
-from app.db.models.teacher import Teacher
-
 from typing import Annotated
 
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.dependies import get_db
+from app.core.exceptions.exceptions import NotFoundException
+from app.db.models.teacher import Teacher
+from app.src.teacher.repository import TeacherRepository
+from app.src.teacher.schemas import CreateTeacher, UpdateTeacher
+from app.src.teacher_category.service import TeacherCategoryService
 
 
 class TeacherService:
