@@ -1,7 +1,10 @@
 from fastapi import APIRouter
 
 from app.src.auth.router import auth_router
+from app.src.building.router import building_router
+from app.src.cabinet.router import cabinet_router
 from app.src.payment_form.router import payment_form_router
+from app.src.speciality.router import specialty_router
 from app.src.teacher.router import teacher_router
 from app.src.teacher_category.router import teacher_category_router
 from app.src.user.router import user_router
@@ -12,3 +15,6 @@ main_router.include_router(auth_router)
 main_router.include_router(teacher_router)
 main_router.include_router(teacher_category_router)
 main_router.include_router(payment_form_router)
+main_router.include_router(specialty_router)
+main_router.include_router(building_router)
+main_router.include_router(cabinet_router)
