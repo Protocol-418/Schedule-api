@@ -22,7 +22,10 @@ class ClassSessionTypeService:
         """Получение типа занятия по названию"""
         session_type = await self.type_repo.get_entity_by_filter(name=name)
         if not session_type:
-            raise NotFoundException(service="ClassSessionType", message="Тип занятия с таким названием не найден")
+            raise NotFoundException(
+                service="ClassSessionType",
+                message="Тип занятия с таким названием не найден",
+            )
         return session_type
 
     async def _get_all_types(self) -> list[ClassSessionType]:
@@ -39,7 +42,10 @@ class ClassSessionTypeService:
                 service="ClassSessionType",
             )
 
-        new_type = ClassSessionType(name=type_data.name)
+        new_type = ClassSessionType(
+            name=type_data.name,
+            is_stream=type_data.is_stream,
+        )
         created_type = await self.type_repo.create_entity(new_type)
         return created_type
 
@@ -49,7 +55,9 @@ class ClassSessionTypeService:
         delete_result = await self.type_repo.delete_entity(session_type)
         return delete_result
 
-    async def _update_type(self, name: str, type_data: UpdateClassSessionType) -> ClassSessionType:
+    async def _update_type(
+        self, name: str, type_data: UpdateClassSessionType
+    ) -> ClassSessionType:
         """Обновление типа занятия"""
         session_type = await self._get_type_by_name(name)
 

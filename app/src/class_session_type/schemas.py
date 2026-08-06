@@ -14,17 +14,27 @@ ClassSessionTypeName = Annotated[
     ),
 ]
 
+IsStream = Annotated[
+    bool,
+    Field(
+        description="Флаг, обозначающий, является ли тип пары потоковым",
+        examples=True,
+    ),
+]
+
 
 class BaseClassSessionTypeModel(CustomBaseModel):
     """Базовая схема со всеми возможными полями (все nullable для гибкости)"""
 
     name: ClassSessionTypeName | None = None
+    is_stream: IsStream | None = None
 
 
 class CreateClassSessionType(BaseClassSessionTypeModel):
     """Схема создания"""
 
     name: ClassSessionTypeName
+    is_stream: IsStream
 
 
 class UpdateClassSessionType(BaseClassSessionTypeModel):
@@ -35,3 +45,4 @@ class ShowClassSessionType(BaseClassSessionTypeModel):
     """Схема ответа"""
 
     name: ClassSessionTypeName
+    is_stream: IsStream
