@@ -18,7 +18,7 @@ IsStream = Annotated[
     bool,
     Field(
         description="Флаг, обозначающий, является ли тип пары потоковым",
-        examples=True,
+        examples=[True],
     ),
 ]
 
