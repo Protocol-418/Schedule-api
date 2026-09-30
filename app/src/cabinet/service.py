@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.core.dependies import get_db
 from app.core.exceptions.exceptions import NotFoundException
 from app.db.models.cabinet import Cabinet
@@ -22,14 +23,16 @@ class CabinetService:
             raise NotFoundException(service="Cabinet", message="Кабинет с таким ID не найден")
         return cabinet
 
-    async def _get_all_cabinets(self) -> list[Cabinet]:
+    async def _get_all_cabinets(self, pagination: Pagination) -> list[Cabinet]:
         """Получение всех кабинетов"""
-        cabinets = await self.cabinet_repo.get_all_entities()
+        cabinets = await self.cabinet_repo.get_all_entities(pagination=pagination)
         return cabinets
 
-    async def _get_cabinets_by_building(self, building_number: int) -> list[Cabinet]:
+    async def _get_cabinets_by_building(self, building_number: int, pagination: Pagination) -> list[Cabinet]:
         """Получение всех кабинетов в конкретном здании"""
-        cabinets = await self.cabinet_repo.get_entities_by_filter(building_number=building_number)
+        cabinets = await self.cabinet_repo.get_entities_by_filter(
+            pagination=pagination, building_number=building_number
+        )
         return cabinets
 
     async def _create_cabinet(self, cabinet_data: CreateCabinet) -> Cabinet:
