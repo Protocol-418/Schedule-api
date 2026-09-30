@@ -16,16 +16,16 @@ class Pagination(CustomBaseModel):
     page: Annotated[
         int,
         Field(
-            default=0,
-            description="Страница данных, с которой будем их брать",
-            examples=[0],
+            default=1,
+            description="Страница данных, с которой будем их брать (По умолчанию с первой)",
+            examples=[1],
         ),
     ]
     limit: Annotated[
         int,
         Field(
             default=100,
-            description="Количество записей на одной странице данных",
+            description="Количество записей на одной странице данных (По умолчанию 100 зписей)",
             examples=[100],
         ),
     ]
