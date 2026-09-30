@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from app.core.base_schemas import Pagination
 from app.src.payment_form.schemas import (
     CreatePaymentForm,
     ShowPaymentForm,
@@ -30,9 +31,10 @@ async def get_payment_form_by_name(
 
 @payment_form_router.get("/search/all", response_model=list[ShowPaymentForm], status_code=200)
 async def get_all_payment_forms(
-    payment_form_service: Annotated[PaymentFormService, Depends(PaymentFormService)]
+    payment_form_service: Annotated[PaymentFormService, Depends(PaymentFormService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await payment_form_service._get_all_payment_forms()
+    return await payment_form_service._get_all_payment_forms(pagination)
 
 
 @payment_form_router.delete("/delete/{name}", response_model=bool, status_code=200)

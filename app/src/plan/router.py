@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from app.core.base_schemas import Pagination
 from app.src.plan.schemas import CreatePlan, ShowPlan, UpdatePlan
 from app.src.plan.service import PlanService
 
@@ -26,17 +27,19 @@ async def get_plan_by_id(
 
 @plan_router.get("/search/all", response_model=list[ShowPlan], status_code=200)
 async def get_all_plans(
-    plan_service: Annotated[PlanService, Depends(PlanService)]
+    plan_service: Annotated[PlanService, Depends(PlanService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await plan_service._get_all_plans()
+    return await plan_service._get_all_plans(pagination)
 
 
 @plan_router.get("/search/by-specialty/{specialty_code}", response_model=list[ShowPlan], status_code=200)
 async def get_plans_by_specialty(
     specialty_code: str,
-    plan_service: Annotated[PlanService, Depends(PlanService)]
+    plan_service: Annotated[PlanService, Depends(PlanService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await plan_service._get_plans_by_specialty(specialty_code)
+    return await plan_service._get_plans_by_specialty(specialty_code, pagination)
 
 
 @plan_router.delete("/delete/{plan_id}", response_model=bool, status_code=200)

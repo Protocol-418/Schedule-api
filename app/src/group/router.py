@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from app.core.base_schemas import Pagination
 from app.src.group.schemas import CreateGroup, ShowGroup, UpdateGroup
 from app.src.group.service import GroupService
 
@@ -26,17 +27,19 @@ async def get_group_by_name(
 
 @group_router.get("/search/all", response_model=list[ShowGroup], status_code=200)
 async def get_all_groups(
-    group_service: Annotated[GroupService, Depends(GroupService)]
+    group_service: Annotated[GroupService, Depends(GroupService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await group_service._get_all_groups()
+    return await group_service._get_all_groups(pagination)
 
 
 @group_router.get("/search/by-specialty/{specialty_code}", response_model=list[ShowGroup], status_code=200)
 async def get_groups_by_specialty(
     specialty_code: str,
-    group_service: Annotated[GroupService, Depends(GroupService)]
+    group_service: Annotated[GroupService, Depends(GroupService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await group_service._get_groups_by_specialty(specialty_code)
+    return await group_service._get_groups_by_specialty(specialty_code, pagination)
 
 
 @group_router.delete("/delete/{name}", response_model=bool, status_code=200)

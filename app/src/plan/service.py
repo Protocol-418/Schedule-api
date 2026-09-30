@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.core.dependies import get_db
 from app.core.exceptions.exceptions import NotFoundException
 from app.db.models.plan import Plan
@@ -24,15 +25,17 @@ class PlanService:
             raise NotFoundException(service="Plan", message="Учебный план с таким ID не найден")
         return plan
 
-    async def _get_all_plans(self) -> list[Plan]:
+    async def _get_all_plans(self, pagination: Pagination) -> list[Plan]:
         """Получение всех учебных планов"""
-        plans = await self.plan_repo.get_all_entities()
+        plans = await self.plan_repo.get_all_entities(pagination=pagination)
         return plans
 
-    async def _get_plans_by_specialty(self, specialty_code: str) -> list[Plan]:
+    async def _get_plans_by_specialty(self, specialty_code: str, pagination: Pagination) -> list[Plan]:
         """Получение всех учебных планов по коду специальности"""
         await self.specialty_service._get_specialty_by_code(specialty_code)
-        plans = await self.plan_repo.get_entities_by_filter(specialty_code=specialty_code)
+        plans = await self.plan_repo.get_entities_by_filter(
+            pagination=pagination, specialty_code=specialty_code
+        )
         return plans
 
     async def _create_plan(self, plan_data: CreatePlan) -> Plan:

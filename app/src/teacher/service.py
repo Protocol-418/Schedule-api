@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.core.dependies import get_db
 from app.core.exceptions.exceptions import NotFoundException
 from app.db.models.teacher import Teacher
@@ -24,9 +25,9 @@ class TeacherService:
             raise NotFoundException(service="Teacher", message="Преподаватель с таким id не найден")
         return teacher
 
-    async def _get_all_teachers(self) -> list[Teacher]:
+    async def _get_all_teachers(self, pagination: Pagination) -> list[Teacher]:
         """Получение всех преподавателей"""
-        teachers = await self.teacher_repo.get_all_entities()
+        teachers = await self.teacher_repo.get_all_entities(pagination=pagination)
         return teachers
 
     async def _create_teacher(self, teacher_data: CreateTeacher) -> Teacher:

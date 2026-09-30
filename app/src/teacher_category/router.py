@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from app.core.base_schemas import Pagination
 from app.src.teacher_category.schemas import (
     CreateTeacherCategory,
     ShowTeacherCategory,
@@ -30,9 +31,10 @@ async def get_category_by_name(
 
 @teacher_category_router.get("/search/all", response_model=list[ShowTeacherCategory], status_code=200)
 async def get_all_categories(
-    category_service: Annotated[TeacherCategoryService, Depends(TeacherCategoryService)]
+    category_service: Annotated[TeacherCategoryService, Depends(TeacherCategoryService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await category_service._get_all_categories()
+    return await category_service._get_all_categories(pagination)
 
 
 @teacher_category_router.delete("/delete/{name}", response_model=bool, status_code=200)

@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.core.dependies import get_db
 from app.core.exceptions.exceptions import ConflictException, NotFoundException
 from app.db.models.teachers_category import TeachersCategory
@@ -25,9 +26,9 @@ class TeacherCategoryService:
             raise NotFoundException(service="TeacherCategory", message="Категория с таким названием не найдена")
         return category
 
-    async def _get_all_categories(self) -> list[TeachersCategory]:
+    async def _get_all_categories(self, pagination: Pagination) -> list[TeachersCategory]:
         """Получение всех категорий"""
-        categories = await self.category_repo.get_all_entities()
+        categories = await self.category_repo.get_all_entities(pagination=pagination)
         return categories
 
     async def _create_category(self, category_data: CreateTeacherCategory) -> TeachersCategory:

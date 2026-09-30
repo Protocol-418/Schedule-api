@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.core.dependies import get_db
 from app.core.exceptions.exceptions import ConflictException, NotFoundException
 from app.db.models.specialty import Specialty
@@ -22,9 +23,9 @@ class SpecialtyService:
             raise NotFoundException(service="Specialty", message="Специальность с таким кодом не найдена")
         return specialty
 
-    async def _get_all_specialties(self) -> list[Specialty]:
+    async def _get_all_specialties(self, pagination: Pagination) -> list[Specialty]:
         """Получение всех специальностей"""
-        specialties = await self.specialty_repo.get_all_entities()
+        specialties = await self.specialty_repo.get_all_entities(pagination=pagination)
         return specialties
 
     async def _create_specialty(self, specialty_data: CreateSpecialty) -> Specialty:

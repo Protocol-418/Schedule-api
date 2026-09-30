@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.core.dependies import get_db
 from app.core.exceptions.exceptions import ConflictException, NotFoundException
 from app.db.models.building import Building
@@ -22,9 +23,9 @@ class BuildingService:
             raise NotFoundException(service="Building", message="Корпус с таким номером не найден")
         return building
 
-    async def _get_all_buildings(self) -> list[Building]:
+    async def _get_all_buildings(self, pagination: Pagination) -> list[Building]:
         """Получение всех корпусов"""
-        buildings = await self.building_repo.get_all_entities()
+        buildings = await self.building_repo.get_all_entities(pagination=pagination)
         return buildings
 
     async def _create_building(self, building_data: CreateBuilding) -> Building:

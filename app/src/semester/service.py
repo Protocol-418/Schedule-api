@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.core.dependies import get_db
 from app.core.exceptions.exceptions import NotFoundException
 from app.db.models.semester import Semester
@@ -24,15 +25,17 @@ class SemesterService:
             raise NotFoundException(service="Semester", message="Семестр с таким ID не найден")
         return semester
 
-    async def _get_all_semesters(self) -> list[Semester]:
+    async def _get_all_semesters(self, pagination: Pagination) -> list[Semester]:
         """Получение всех семестров"""
-        semesters = await self.semester_repo.get_all_entities()
+        semesters = await self.semester_repo.get_all_entities(pagination=pagination)
         return semesters
 
-    async def _get_semesters_by_plan(self, plan_id: int) -> list[Semester]:
+    async def _get_semesters_by_plan(self, plan_id: int, pagination: Pagination) -> list[Semester]:
         """Получение всех семестров конкретного учебного плана"""
         await self.plan_service._get_plan_by_id(plan_id)
-        semesters = await self.semester_repo.get_entities_by_filter(plan_id=plan_id)
+        semesters = await self.semester_repo.get_entities_by_filter(
+            pagination=pagination, plan_id=plan_id
+        )
         return semesters
 
     async def _create_semester(self, semester_data: CreateSemester) -> Semester:

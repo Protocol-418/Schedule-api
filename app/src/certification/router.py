@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from app.core.base_schemas import Pagination
 from app.src.certification.schemas import (
     CreateCertification,
     ShowCertification,
@@ -30,9 +31,10 @@ async def get_certification_by_subject_id(
 
 @certification_router.get("/search/all", response_model=list[ShowCertification], status_code=200)
 async def get_all_certifications(
-    certification_service: Annotated[CertificationService, Depends(CertificationService)]
+    certification_service: Annotated[CertificationService, Depends(CertificationService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await certification_service._get_all_certifications()
+    return await certification_service._get_all_certifications(pagination)
 
 
 @certification_router.delete("/delete/{subject_id}", response_model=bool, status_code=200)

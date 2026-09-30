@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from app.core.base_schemas import Pagination
 from app.src.building.schemas import CreateBuilding, ShowBuilding, UpdateBuilding
 from app.src.building.service import BuildingService
 
@@ -26,9 +27,10 @@ async def get_building_by_number(
 
 @building_router.get("/search/all", response_model=list[ShowBuilding], status_code=200)
 async def get_all_buildings(
-    building_service: Annotated[BuildingService, Depends(BuildingService)]
+    building_service: Annotated[BuildingService, Depends(BuildingService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await building_service._get_all_buildings()
+    return await building_service._get_all_buildings(pagination)
 
 
 @building_router.delete("/delete/{number}", response_model=bool, status_code=200)

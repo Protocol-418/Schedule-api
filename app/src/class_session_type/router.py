@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from app.core.base_schemas import Pagination
 from app.src.class_session_type.schemas import (
     CreateClassSessionType,
     ShowClassSessionType,
@@ -30,9 +31,10 @@ async def get_class_session_type_by_name(
 
 @class_session_type_router.get("/search/all", response_model=list[ShowClassSessionType], status_code=200)
 async def get_all_class_session_types(
-    type_service: Annotated[ClassSessionTypeService, Depends(ClassSessionTypeService)]
+    type_service: Annotated[ClassSessionTypeService, Depends(ClassSessionTypeService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await type_service._get_all_types()
+    return await type_service._get_all_types(pagination)
 
 
 @class_session_type_router.delete("/delete/{name}", response_model=bool, status_code=200)

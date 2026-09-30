@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.core.dependies import get_db
 from app.core.exceptions.exceptions import NotFoundException
 from app.db.models.payment_form import PaymentForm
@@ -22,9 +23,9 @@ class PaymentFormService:
             raise NotFoundException(service="PaymentForm", message="Форма оплаты с таким названием не найдена")
         return payment_form
 
-    async def _get_all_payment_forms(self) -> list[PaymentForm]:
+    async def _get_all_payment_forms(self, pagination: Pagination) -> list[PaymentForm]:
         """Получение всех форм оплаты"""
-        payment_forms = await self.payment_form_repo.get_all_entities()
+        payment_forms = await self.payment_form_repo.get_all_entities(pagination=pagination)
         return payment_forms
 
     async def _create_payment_form(self, payment_form_data: CreatePaymentForm) -> PaymentForm:

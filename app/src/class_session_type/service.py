@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.core.dependies import get_db
 from app.core.exceptions.exceptions import ConflictException, NotFoundException
 from app.db.models.class_session_type import ClassSessionType
@@ -28,9 +29,9 @@ class ClassSessionTypeService:
             )
         return session_type
 
-    async def _get_all_types(self) -> list[ClassSessionType]:
+    async def _get_all_types(self, pagination: Pagination) -> list[ClassSessionType]:
         """Получение всех типов занятий"""
-        types = await self.type_repo.get_all_entities()
+        types = await self.type_repo.get_all_entities(pagination=pagination)
         return types
 
     async def _create_type(self, type_data: CreateClassSessionType) -> ClassSessionType:

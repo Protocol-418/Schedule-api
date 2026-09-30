@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.core.dependies import get_db
 from app.core.exceptions.exceptions import ConflictException, NotFoundException
 from app.db.models.group import Group
@@ -28,15 +29,17 @@ class GroupService:
             raise NotFoundException(service="Group", message="Группа с таким названием не найдена")
         return group
 
-    async def _get_all_groups(self) -> list[Group]:
+    async def _get_all_groups(self, pagination: Pagination) -> list[Group]:
         """Получение всех групп"""
-        groups = await self.group_repo.get_all_entities()
+        groups = await self.group_repo.get_all_entities(pagination=pagination)
         return groups
 
-    async def _get_groups_by_specialty(self, specialty_code: str) -> list[Group]:
+    async def _get_groups_by_specialty(self, specialty_code: str, pagination: Pagination) -> list[Group]:
         """Получение всех групп по коду специальности"""
         await self.specialty_service._get_specialty_by_code(specialty_code)
-        groups = await self.group_repo.get_entities_by_filter(specialty_code=specialty_code)
+        groups = await self.group_repo.get_entities_by_filter(
+            pagination=pagination, specialty_code=specialty_code
+        )
         return groups
 
     async def _create_group(self, group_data: CreateGroup) -> Group:

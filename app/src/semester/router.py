@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from app.core.base_schemas import Pagination
 from app.src.semester.schemas import CreateSemester, ShowSemester, UpdateSemester
 from app.src.semester.service import SemesterService
 
@@ -26,17 +27,19 @@ async def get_semester_by_id(
 
 @semester_router.get("/search/all", response_model=list[ShowSemester], status_code=200)
 async def get_all_semesters(
-    semester_service: Annotated[SemesterService, Depends(SemesterService)]
+    semester_service: Annotated[SemesterService, Depends(SemesterService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await semester_service._get_all_semesters()
+    return await semester_service._get_all_semesters(pagination)
 
 
 @semester_router.get("/search/by-plan/{plan_id}", response_model=list[ShowSemester], status_code=200)
 async def get_semesters_by_plan(
     plan_id: int,
-    semester_service: Annotated[SemesterService, Depends(SemesterService)]
+    semester_service: Annotated[SemesterService, Depends(SemesterService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await semester_service._get_semesters_by_plan(plan_id)
+    return await semester_service._get_semesters_by_plan(plan_id, pagination)
 
 
 @semester_router.delete("/delete/{semester_id}", response_model=bool, status_code=200)

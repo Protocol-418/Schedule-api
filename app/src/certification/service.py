@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.core.dependies import get_db
 from app.core.exceptions.exceptions import ConflictException, NotFoundException
 from app.db.models.certification import Certification
@@ -25,9 +26,9 @@ class CertificationService:
             )
         return certification
 
-    async def _get_all_certifications(self) -> list[Certification]:
+    async def _get_all_certifications(self, pagination: Pagination) -> list[Certification]:
         """Получение всех форм аттестации"""
-        certifications = await self.certification_repo.get_all_entities()
+        certifications = await self.certification_repo.get_all_entities(pagination=pagination)
         return certifications
 
     async def _create_certification(self, certification_data: CreateCertification) -> Certification:

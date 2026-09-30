@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from app.core.base_schemas import Pagination
 from app.src.speciality.schemas import CreateSpecialty, ShowSpecialty, UpdateSpecialty
 from app.src.speciality.service import SpecialtyService
 
@@ -26,9 +27,10 @@ async def get_specialty_by_code(
 
 @specialty_router.get("/search/all", response_model=list[ShowSpecialty], status_code=200)
 async def get_all_specialties(
-    specialty_service: Annotated[SpecialtyService, Depends(SpecialtyService)]
+    specialty_service: Annotated[SpecialtyService, Depends(SpecialtyService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await specialty_service._get_all_specialties()
+    return await specialty_service._get_all_specialties(pagination)
 
 
 @specialty_router.delete("/delete/{code}", response_model=bool, status_code=200)

@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from app.core.base_schemas import Pagination
 from app.src.teacher.schemas import CreateTeacher, ShowTeacher, UpdateTeacher
 from app.src.teacher.service import TeacherService
 
@@ -26,9 +27,10 @@ async def get_teacher_by_id(
 
 @teacher_router.get("/search/all", response_model=list[ShowTeacher], status_code=200)
 async def get_all_teachers(
-    teacher_service: Annotated[TeacherService, Depends(TeacherService)]
+    teacher_service: Annotated[TeacherService, Depends(TeacherService)],
+    pagination: Annotated[Pagination, Depends()],
 ):
-    return await teacher_service._get_all_teachers()
+    return await teacher_service._get_all_teachers(pagination)
 
 
 @teacher_router.delete("/delete/{teacher_id}", response_model=bool, status_code=200)
