@@ -4,6 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.base_schemas import Pagination
 from app.db.models.base import Base
 
 # Тип модели для аннотации функций
@@ -18,9 +19,11 @@ class BaseRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_all_entities(self) -> list[ModelType]:
+    async def get_all_entities(self, pagination: Pagination | None = None) -> list[ModelType]:
         """Метод получения всех записей"""
         stmt = select(self.model)
+        if pagination:
+            stmt = stmt.offset(pagination.offset).limit(pagination.limit)
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
@@ -30,9 +33,11 @@ class BaseRepository:
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
-    async def get_entities_by_filter(self, **kwargs) -> list[ModelType]:
+    async def get_entities_by_filter(self, pagination: Pagination | None = None, **kwargs) -> list[ModelType]:
         """Метод для получения множества записей по заданному фильтру"""
         stmt = select(self.model).filter_by(**kwargs)
+        if pagination:
+            stmt = stmt.offset(pagination.offset).limit(pagination.limit)
         result = await self.session.execute(stmt)
         return list(result.scalars().all()) or []
 
