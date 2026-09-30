@@ -17,6 +17,7 @@ class Pagination(CustomBaseModel):
         int,
         Field(
             default=1,
+            ge=1,
             description="Страница данных, с которой будем их брать (По умолчанию с первой)",
             examples=[1],
         ),
@@ -25,7 +26,13 @@ class Pagination(CustomBaseModel):
         int,
         Field(
             default=100,
+            ge=1,
+            le=1000,
             description="Количество записей на одной странице данных (По умолчанию 100 зписей)",
             examples=[100],
         ),
     ]
+
+    @property
+    def offset(self) -> int:
+        return (self.page - 1) * self.limit
