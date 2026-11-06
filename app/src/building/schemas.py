@@ -12,6 +12,7 @@ IsActive = Annotated[bool, Field(description="Флаг активности ко
 
 class BaseBuildingModel(CustomBaseModel):
     """Базовая схема со всеми возможными полями (все nullable для гибкости)"""
+
     number: BuildingNumber | None = None
     city: BuildingCity | None = None
     address: BuildingAddress | None = None
@@ -20,9 +21,8 @@ class BaseBuildingModel(CustomBaseModel):
 
 class CreateBuilding(BaseBuildingModel):
     """Схема создания"""
+
     number: BuildingNumber
-    city: BuildingCity
-    address: BuildingAddress
 
 
 class UpdateBuilding(BaseBuildingModel):
@@ -31,6 +31,7 @@ class UpdateBuilding(BaseBuildingModel):
 
 class ShowBuilding(BaseBuildingModel):
     """Схема ответа"""
+
     number: BuildingNumber
     city: BuildingCity
     address: BuildingAddress
